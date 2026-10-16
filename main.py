@@ -24,7 +24,6 @@ def calculate_future_value(
 
     monthly_rate = annual_rate / 12
     total_months = years * 12
-
     balance = principal
 
     for _ in range(total_months):
@@ -41,14 +40,44 @@ def calculate_future_value(
     }
 
 
+def compare_investment_periods(
+    principal: float,
+    monthly_contribution: float,
+    annual_rate: float,
+    years_list: list[int],
+) -> list[dict]:
+    """比较多个投资期限下的估算资产与收益。"""
+    if not years_list:
+        raise ValueError("投资期限列表不能为空")
+
+    results = []
+
+    for years in years_list:
+        result = calculate_future_value(
+            principal=principal,
+            monthly_contribution=monthly_contribution,
+            annual_rate=annual_rate,
+            years=years,
+        )
+
+        results.append({
+            "years": years,
+            **result,
+        })
+
+    return results
+
+
 if __name__ == "__main__":
-    result = calculate_future_value(
+    results = compare_investment_periods(
         principal=50000,
         monthly_contribution=400,
         annual_rate=0.04,
-        years=20,
+        years_list=[10, 20],
     )
 
-    print("期末估算资产：", result["future_value"], "元")
-    print("累计投入：", result["total_contributions"], "元")
-    print("估算收益：", result["estimated_gain"], "元")
+    for result in results:
+        print(f"\n投资期限：{result['years']} 年")
+        print(f"期末估算资产：{result['future_value']:.2f} 元")
+        print(f"累计投入：{result['total_contributions']:.2f} 元")
+        print(f"估算收益：{result['estimated_gain']:.2f} 元")

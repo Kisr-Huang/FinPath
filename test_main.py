@@ -1,7 +1,7 @@
 
 import pytest
 
-from main import calculate_future_value
+from main import calculate_future_value, compare_investment_periods
 
 
 def test_zero_interest_rate():
@@ -49,4 +49,34 @@ def test_invalid_inputs(
             monthly_contribution,
             annual_rate,
             years,
+        )
+
+def test_compare_investment_periods():
+    results = compare_investment_periods(
+        principal=50000,
+        monthly_contribution=400,
+        annual_rate=0.04,
+        years_list=[10, 20],
+    )
+
+    assert len(results) == 2
+
+    assert results[0]["years"] == 10
+    assert results[0]["future_value"] == 133441.56
+    assert results[0]["total_contributions"] == 98000
+    assert results[0]["estimated_gain"] == 35441.56
+
+    assert results[1]["years"] == 20
+    assert results[1]["future_value"] == 257838.95
+    assert results[1]["total_contributions"] == 146000
+    assert results[1]["estimated_gain"] == 111838.95
+
+
+def test_compare_investment_periods_empty_list():
+    with pytest.raises(ValueError):
+        compare_investment_periods(
+            principal=50000,
+            monthly_contribution=400,
+            annual_rate=0.04,
+            years_list=[],
         )
