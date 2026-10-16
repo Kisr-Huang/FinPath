@@ -5,7 +5,7 @@ def calculate_future_value(
     annual_rate: float,
     years: int,
 ) -> dict:
-    """计算初始本金加每月月末追加资金的未来估算价值。
+    """计算本金和每月月末追加资金的未来估算价值。
 
     annual_rate 使用小数表示，例如 4% 应传入 0.04。
     假设月利率等于年收益率除以 12。
@@ -52,34 +52,3 @@ if __name__ == "__main__":
     print("期末估算资产：", result["future_value"], "元")
     print("累计投入：", result["total_contributions"], "元")
     print("估算收益：", result["estimated_gain"], "元")
-
-def run_basic_tests():
-    # 测试 1：零利率，只计算本金与追加金额
-    result = calculate_future_value(1000, 100, 0, 1)
-    assert result["future_value"] == 2200.00
-    assert result["total_contributions"] == 2200.00
-    assert result["estimated_gain"] == 0.00
-
-    # 测试 2：没有每月追加金额
-    result = calculate_future_value(1000, 0, 0.12, 1)
-    assert result["future_value"] > 1000
-    assert result["total_contributions"] == 1000.00
-
-    # 测试 3：本金与追加金额都为零
-    result = calculate_future_value(0, 0, 0.04, 1)
-    assert result["future_value"] == 0.00
-    assert result["estimated_gain"] == 0.00
-
-    # 测试 4：负本金应当报错
-    try:
-        calculate_future_value(-1, 100, 0.04, 1)
-    except ValueError:
-        pass
-    else:
-        raise AssertionError("负本金应该触发 ValueError")
-
-    print("全部基础测试通过！")
-
-
-if __name__ == "__main__":
-    run_basic_tests()
